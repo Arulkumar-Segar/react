@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maria — Nature Lover</title>
+
+<!-- Google Fonts (Poppins for display, Nunito for body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   1. ROOT TOKENS — the design system: colors, type, spacing, radii
+   ===================================================================== */
+:root{
+  /* Sky / sunrise palette */
+  --sunrise-orange:#FF8A50;
+  --sunrise-gold:#FFC65C;
+  --sky-blue:#6EC6E8;
+  --sky-light:#CFF1F6;
+
+  /* Garden palette */
+  --leaf-forest:#2F7A3B;
+  --leaf-green:#4CA850;
+  --leaf-light:#8FD16B;
+  --flower-pink:#FF6FA5;
+  --flower-yellow:#FFD34D;
+  --flower-purple:#B47CE5;
+  --flower-white:#FFFFFF;
+  --wood-brown:#A9784F;
+  --wood-dark:#7A5232;
+  --water-blue:#7FD8E8;
+  --stone-grey:#B8B2A6;
+
+  /* Neutrals */
+  --ink:#1F2A1F;
+  --ink-soft:#4B5A4B;
+  --cream:#FBF9F4;
+  --glass-bg:rgba(255,255,255,0.18);
+  --glass-border:rgba(255,255,255,0.45);
+
+  /* Type */
+  --font-display:'Poppins', sans-serif;
+  --font-body:'Nunito', sans-serif;
+
+  /* Layout */
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --shadow-soft:0 20px 40px rgba(31,42,31,0.18);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--cream);
+  overflow-x:hidden;
+}
+
+img{ max-width:100%; display:block; }
+
+a{ text-decoration:none; color:inherit; }
+
+ul{ list-style:none; }
+
+section{ position:relative; }
+
+.section-heading{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(1.8rem, 4vw, 2.6rem);
+  color:var(--leaf-forest);
+  text-align:center;
+  margin-bottom:0.4rem;
+}
+.section-sub{
+  text-align:center;
+  color:var(--ink-soft);
+  max-width:560px;
+  margin:0 auto 2.5rem auto;
+  font-size:1rem;
+}
+
+/* Fade-in-on-scroll utility, toggled by JS via IntersectionObserver */
+.reveal{
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =====================================================================
+   2. NAVBAR — sticky, transparent, blurred, with hamburger for mobile
+   ===================================================================== */
+.navbar{
+  position:fixed;
+  top:0; left:0;
+  width:100%;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1.1rem 5%;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,0.25);
+  transition:background 0.4s ease, padding 0.4s ease;
+}
+.navbar.scrolled{
+  background:rgba(255,255,255,0.85);
+  padding:0.7rem 5%;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+.navbar.scrolled .nav-link,
+.navbar.scrolled .logo{ color:var(--leaf-forest); }
+
+.logo{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:1.4rem;
+  color:#fff;
+  letter-spacing:0.5px;
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  transition:color 0.4s ease;
+}
+.logo span{ color:var(--flower-yellow); }
+
+.nav-menu{
+  display:flex;
+  gap:2.2rem;
+}
+.nav-link{
+  position:relative;
+  font-weight:600;
+  color:#fff;
+  padding:0.3rem 0;
+  transition:color 0.4s ease;
+}
+.nav-link::after{
+  content:'';
+  position:absolute;
+  left:0; bottom:-2px;
+  width:0%;
+  height:2px;
+  background:var(--flower-yellow);
+  transition:width 0.35s ease;
+}
+.nav-link:hover::after{ width:100%; }
+
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+  z-index:110;
+}
+.hamburger span{
+  width:26px;
+  height:3px;
+  background:#fff;
+  border-radius:3px;
+  transition:transform 0.35s ease, opacity 0.35s ease, background 0.35s ease;
+}
+.navbar.scrolled .hamburger span{ background:var(--leaf-forest); }
+.hamburger.open span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
+.hamburger.open span:nth-child(2){ opacity:0; }
+.hamburger.open span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
+
+/* =====================================================================
+   3. HERO SECTION — sunrise sky, hills, trees, flowers, Maria
+   ===================================================================== */
+.hero{
+  position:relative;
+  width:100%;
+  height:100vh;
+  min-height:600px;
+  overflow:hidden;
+  background:linear-gradient(to bottom,
+      var(--sunrise-orange) 0%,
+      var(--sunrise-gold) 28%,
+      var(--sky-blue) 60%,
+      var(--sky-light) 78%,
+      var(--leaf-green) 78%);
+  animation:sunrise-shift 14s ease-in-out infinite alternate;
+}
+@keyframes sunrise-shift{
+  0%{ filter:brightness(0.94) saturate(1); }
+  100%{ filter:brightness(1.05) saturate(1.08); }
+}
+
+/* --- Sun with light rays --- */
+.sun{
+  position:absolute;
+  top:14%;
+  left:50%;
+  transform:translateX(-50%);
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #FFF6D8, var(--flower-yellow) 70%);
+  box-shadow:0 0 90px 40px rgba(255,198,92,0.55);
+  animation:sun-pulse 4.5s ease-in-out infinite;
+  z-index:2;
+}
+@keyframes sun-pulse{
+  0%,100%{ transform:translateX(-50%) scale(1); }
+  50%{ transform:translateX(-50%) scale(1.07); }
+}
+.light-rays{
+  position:absolute;
+  top:14%;
+  left:50%;
+  width:600px;
+  height:600px;
+  transform:translate(-50%,-30%);
+  background:conic-gradient(from 0deg,
+      rgba(255,255,255,0.12) 0deg, transparent 12deg,
+      rgba(255,255,255,0.12) 24deg, transparent 36deg,
+      rgba(255,255,255,0.12) 48deg, transparent 60deg,
+      rgba(255,255,255,0.12) 72deg, transparent 84deg,
+      rgba(255,255,255,0.12) 96deg, transparent 108deg,
+      rgba(255,255,255,0.12) 120deg, transparent 132deg);
+  border-radius:50%;
+  animation:rays-spin 40s linear infinite;
+  z-index:1;
+  pointer-events:none;
+}
+@keyframes rays-spin{
+  from{ transform:translate(-50%,-30%) rotate(0deg); }
+  to{ transform:translate(-50%,-30%) rotate(360deg); }
+}
+
+/* --- Clouds (positions randomized by JS) --- */
+.cloud-layer{ position:absolute; inset:0; z-index:2; pointer-events:none; }
+.cloud{
+  position:absolute;
+  background:#fff;
+  border-radius:50px;
+  opacity:0.92;
+}
+.cloud::before,.cloud::after{
+  content:'';
+  position:absolute;
+  background:#fff;
+  border-radius:50%;
+}
+.cloud::before{ width:55%; height:140%; top:-60%; left:8%; }
+.cloud::after{ width:45%; height:120%; top:-45%; right:8%; }
+@keyframes cloud-drift{
+  from{ transform:translateX(-25vw); }
+  to{ transform:translateX(125vw); }
+}
+
+/* --- Birds (CSS chevrons flapping across the sky) --- */
+.bird-layer{ position:absolute; inset:0; z-index:3; pointer-events:none; }
+.bird{
+  position:absolute;
+  width:26px;
+  height:12px;
+}
+.bird::before,.bird::after{
+  content:'';
+  position:absolute;
+  top:0;
+  width:13px;
+  height:12px;
+  border-top:2.5px solid rgba(60,40,30,0.75);
+  border-radius:50% 0 0 0;
+  transform-origin:bottom right;
+  animation:bird-flap 0.6s ease-in-out infinite alternate;
+}
+.bird::before{ left:0; }
+.bird::after{ right:0; transform:scaleX(-1); animation-delay:0.05s; }
+@keyframes bird-flap{
+  from{ transform:rotate(0deg); }
+  to{ transform:rotate(-35deg); }
+}
+.bird::after{ transform:scaleX(-1) rotate(0deg); }
+@keyframes bird-fly{
+  from{ transform:translateX(-10vw) translateY(0); }
+  to{ transform:translateX(110vw) translateY(-40px); }
+}
+
+/* --- Hills --- */
+.hill{
+  position:absolute;
+  bottom:0;
+  left:-10%;
+  width:120%;
+  border-radius:50% 50% 0 0 / 100% 100% 0 0;
+  z-index:4;
+}
+.hill-far{ height:20vh; background:#7FC26E; bottom:10vh; opacity:0.85; }
+.hill-near{ height:14vh; background:var(--leaf-green); bottom:0; }
+
+/* --- Ground / grass strip with wind-blown blades --- */
+.grass-strip{
+  position:absolute;
+  bottom:0; left:0;
+  width:100%;
+  height:18vh;
+  background:linear-gradient(to bottom, var(--leaf-green), var(--leaf-forest));
+  z-index:5;
+}
+.grass-blade{
+  position:absolute;
+  bottom:0;
+  width:6px;
+  border-radius:4px 4px 0 0;
+  background:var(--leaf-forest);
+  transform-origin:bottom center;
+  animation:sway 2.6s ease-in-out infinite;
+}
+@keyframes sway{
+  0%,100%{ transform:rotate(-7deg); }
+  50%{ transform:rotate(7deg); }
+}
+
+/* --- Trees --- */
+.tree{
+  position:absolute;
+  bottom:16vh;
+  z-index:5;
+  transform-origin:bottom center;
+  animation:tree-sway 5s ease-in-out infinite;
+}
+.tree .trunk{ width:16px; height:80px; background:var(--wood-dark); margin:0 auto; border-radius:4px; }
+.tree .leaves{ position:absolute; left:50%; border-radius:50%; transform:translateX(-50%); }
+.tree .leaves.l1{ width:100px; height:100px; bottom:62px; background:var(--leaf-forest); }
+.tree .leaves.l2{ width:80px; height:80px; bottom:95px; left:35%; background:var(--leaf-green); }
+.tree .leaves.l3{ width:70px; height:70px; bottom:95px; left:65%; background:var(--leaf-light); }
+@keyframes tree-sway{
+  0%,100%{ transform:rotate(-1.5deg); }
+  50%{ transform:rotate(1.5deg); }
+}
+
+/* --- Flowers (built by JS: stem + circular petals) --- */
+.flower{
+  position:absolute;
+  bottom:16vh;
+  z-index:6;
+  transform-origin:bottom center;
+  animation:sway 2.4s ease-in-out infinite, float-flower 3.6s ease-in-out infinite;
+}
+.flower .stem{ width:3px; height:30px; background:var(--leaf-forest); margin:0 auto; }
+.flower .petals{ position:relative; width:20px; height:20px; margin:0 auto -30px auto; }
+.flower .petal{ position:absolute; width:9px; height:9px; border-radius:50%; }
+.flower .center{ position:absolute; width:7px; height:7px; border-radius:50%; background:var(--flower-yellow); top:6.5px; left:6.5px; z-index:2; }
+@keyframes float-flower{
+  0%,100%{ margin-top:0; }
+  50%{ margin-top:-6px; }
+}
+
+/* --- Butterflies & pollen (positioned by JS-generated keyframes) --- */
+.butterfly{ position:absolute; z-index:7; pointer-events:none; }
+.butterfly .wing{ position:absolute; width:9px; height:13px; border-radius:50%; top:0; animation:flap 0.35s ease-in-out infinite alternate; }
+.butterfly .wing.left{ left:-8px; transform-origin:right center; }
+.butterfly .wing.right{ right:-8px; transform-origin:left center; animation-delay:0.05s; }
+.butterfly .body{ position:absolute; left:-1.5px; width:3px; height:15px; background:#4A3524; border-radius:3px; }
+@keyframes flap{
+  from{ transform:scaleX(1) rotate(0deg); }
+  to{ transform:scaleX(0.35) rotate(8deg); }
+}
+.pollen{ position:absolute; border-radius:50%; background:rgba(255,255,255,0.85); box-shadow:0 0 6px 2px rgba(255,255,120,0.6); pointer-events:none; z-index:6; }
+
+/* --- Maria in the hero --- */
+.maria-hero{
+  position:absolute;
+  bottom:14vh;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  text-align:center;
+}
+.maria-hero .glow-ring{
+  position:absolute;
+  bottom:0; left:50%;
+  transform:translateX(-50%);
+  width:220px; height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,214,108,0.55), transparent 70%);
+  animation:glow-pulse 3.2s ease-in-out infinite;
+  z-index:-1;
+}
+@keyframes glow-pulse{
+  0%,100%{ opacity:0.55; transform:translateX(-50%) scale(1); }
+  50%{ opacity:0.9; transform:translateX(-50%) scale(1.15); }
+}
+.maria-hero img{
+  height:42vh;
+  max-height:380px;
+  filter:drop-shadow(0 18px 22px rgba(0,0,0,0.28));
+  animation:float-maria 3.6s ease-in-out infinite;
+  transition:transform 0.4s ease;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.maria-hero img:hover{ transform:scale(1.05); }
+@keyframes float-maria{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-18px); }
+}
+.maria-shadow{
+  width:120px; height:18px;
+  background:rgba(0,0,0,0.22);
+  border-radius:50%;
+  margin:-4px auto 0 auto;
+  filter:blur(3px);
+  animation:shadow-pulse 3.6s ease-in-out infinite;
+}
+@keyframes shadow-pulse{
+  0%,100%{ transform:scale(1); opacity:0.5; }
+  50%{ transform:scale(0.78); opacity:0.3; }
+}
+
+/* --- Hero scroll cue --- */
+.scroll-cue{
+  position:absolute;
+  bottom:2vh; left:50%;
+  transform:translateX(-50%);
+  z-index:12;
+  color:#fff;
+  font-size:0.85rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  animation:cue-bounce 2s ease-in-out infinite;
+  opacity:0.9;
+}
+.scroll-cue .arrow{ width:10px; height:10px; border-right:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(45deg); }
+@keyframes cue-bounce{
+  0%,100%{ transform:translateX(-50%) translateY(0); }
+  50%{ transform:translateX(-50%) translateY(8px); }
+}
+
+/* =====================================================================
+   4. PROFILE CARD SECTION — glassmorphism card with gradient border
+   ===================================================================== */
+.profile-section{
+  padding:6rem 5% 5rem 5%;
+  background:linear-gradient(to bottom, var(--leaf-green) 0%, #EAF7EA 12%, var(--cream) 100%);
+}
+.profile-card-wrap{
+  max-width:420px;
+  margin:0 auto;
+  padding:3px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg, var(--flower-pink), var(--flower-yellow), var(--flower-purple), var(--leaf-green));
+  background-size:300% 300%;
+  animation:border-shift 8s ease infinite, card-float 4.5s ease-in-out infinite;
+  box-shadow:var(--shadow-soft);
+}
+@keyframes border-shift{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+@keyframes card-float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-10px); }
+}
+.profile-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--glass-border);
+  border-radius:calc(var(--radius-lg) - 3px);
+  padding:2.6rem 2rem 2.2rem 2rem;
+  text-align:center;
+  transition:transform 0.4s ease, box-shadow 0.4s ease;
+}
+.profile-card:hover{
+  transform:translateY(-6px) scale(1.015);
+  box-shadow:0 25px 45px rgba(31,42,31,0.22);
+}
+.profile-pic-wrap{
+  position:relative;
+  width:120px; height:120px;
+  margin:0 auto 1.1rem auto;
+}
+.profile-pic-wrap::after{
+  content:'';
+  position:absolute;
+  inset:-6px;
+  border-radius:50%;
+  border:2px solid var(--flower-yellow);
+  animation:ring-pulse 2.6s ease-in-out infinite;
+}
+@keyframes ring-pulse{
+  0%,100%{ transform:scale(1); opacity:0.7; }
+  50%{ transform:scale(1.08); opacity:0.2; }
+}
+.profile-pic{
+  width:120px; height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #fff;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+.profile-name{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:1.6rem;
+  color:var(--leaf-forest);
+}
+.profile-sub{
+  font-weight:700;
+  color:var(--flower-pink);
+  font-size:0.95rem;
+  margin-bottom:0.9rem;
+  letter-spacing:0.4px;
+}
+.profile-desc{
+  color:var(--ink-soft);
+  font-size:0.95rem;
+  line-height:1.55;
+  margin-bottom:1.4rem;
+}
+.social-row{
+  display:flex;
+  justify-content:center;
+  gap:0.7rem;
+  margin-bottom:1.5rem;
+}
+.social-btn{
+  width:42px; height:42px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.5);
+  border:1px solid var(--glass-border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.05rem;
+  transition:transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.social-btn:hover{
+  transform:translateY(-4px) scale(1.08);
+  background:var(--flower-yellow);
+  box-shadow:0 10px 18px rgba(0,0,0,0.18);
+}
+.card-actions{
+  display:flex;
+  gap:0.8rem;
+  justify-content:center;
+}
+
+/* =====================================================================
+   5. PREMIUM BUTTONS — gradient, ripple, glow, hover-lift
+   ===================================================================== */
+.btn{
+  position:relative;
+  overflow:hidden;
+  padding:0.75rem 1.7rem;
+  border:none;
+  border-radius:50px;
+  font-family:var(--font-body);
+  font-weight:700;
+  font-size:0.95rem;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg, var(--leaf-green), var(--leaf-forest));
+  box-shadow:0 8px 18px rgba(47,122,59,0.35);
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 26px rgba(47,122,59,0.45);
+}
+.btn.btn-outline{
+  background:transparent;
+  border:2px solid var(--leaf-forest);
+  color:var(--leaf-forest);
+  box-shadow:none;
+}
+.btn.btn-outline:hover{
+  background:var(--leaf-forest);
+  color:#fff;
+}
+.btn.btn-pink{
+  background:linear-gradient(135deg, var(--flower-pink), #FF9AC4);
+  box-shadow:0 8px 18px rgba(255,111,165,0.35);
+}
+.btn.btn-pink:hover{ box-shadow:0 14px 26px rgba(255,111,165,0.45); }
+
+/* Ripple element injected by JS on click */
+.ripple{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,0.55);
+  transform:scale(0);
+  animation:ripple-anim 0.6s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes ripple-anim{
+  to{ transform:scale(3.5); opacity:0; }
+}
+
+/* =====================================================================
+   6. GARDEN SCENE SECTION — the big animated garden
+   ===================================================================== */
+.garden-section{
+  position:relative;
+  padding:5rem 0 0 0;
+  background:linear-gradient(to bottom, var(--cream) 0%, #DFF2E1 15%, #BFE3C4 40%, var(--leaf-green) 100%);
+  overflow:hidden;
+}
+.garden-stage{
+  position:relative;
+  width:100%;
+  height:88vh;
+  min-height:640px;
+  overflow:hidden;
+}
+
+/* Fence along the front */
+.fence{
+  position:absolute;
+  bottom:0; left:0;
+  width:100%;
+  height:70px;
+  z-index:9;
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  padding:0 2%;
+}
+.fence-post{
+  width:14px;
+  height:60px;
+  background:linear-gradient(to bottom, var(--wood-brown), var(--wood-dark));
+  border-radius:4px 4px 0 0;
+  flex-shrink:0;
+}
+.fence-rail{
+  position:absolute;
+  left:0; width:100%;
+  height:8px;
+  background:var(--wood-dark);
+  z-index:9;
+  opacity:0.85;
+}
+
+/* Pond with ripple rings */
+.pond{
+  position:absolute;
+  bottom:8%;
+  left:6%;
+  width:220px;
+  height:110px;
+  border-radius:50%;
+  background:radial-gradient(ellipse at 40% 35%, #A9EBF2, var(--water-blue) 70%);
+  box-shadow:inset 0 6px 14px rgba(0,60,80,0.25);
+  z-index:4;
+  overflow:hidden;
+}
+.ripple-ring{
+  position:absolute;
+  border:2px solid rgba(255,255,255,0.6);
+  border-radius:50%;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  animation:ripple-grow 3.5s ease-out infinite;
+}
+@keyframes ripple-grow{
+  0%{ width:10px; height:10px; opacity:0.8; }
+  100%{ width:180px; height:90px; opacity:0; }
+}
+
+/* Stones near the pond */
+.stone{
+  position:absolute;
+  border-radius:50% 50% 45% 45%;
+  background:linear-gradient(160deg, #CFCABF, var(--stone-grey));
+  box-shadow:0 4px 6px rgba(0,0,0,0.2);
+  z-index:5;
+}
+
+/* Reused garden elements (trees / bushes / flowers / grass / butterflies /
+   bees / birds / leaves / sparkles) share styles with the hero where
+   possible; garden-specific tweaks below */
+.garden-stage .tree{ bottom:12%; }
+.garden-stage .bush{ position:absolute; bottom:12%; z-index:5; animation:tree-sway 4s ease-in-out infinite; }
+.garden-stage .bush .blob{ position:absolute; border-radius:50%; background:var(--leaf-green); }
+.garden-stage .flower{ bottom:12%; }
+.garden-stage .grass-blade{ position:absolute; bottom:0; }
+.garden-stage .grass-strip{ height:12%; }
+
+.bee{
+  position:absolute;
+  width:14px; height:10px;
+  border-radius:50%;
+  background:repeating-linear-gradient(90deg, #2E2313 0 3px, var(--flower-yellow) 3px 6px);
+  z-index:8;
+}
+.bee::after{
+  content:'';
+  position:absolute;
+  top:-4px; left:3px;
+  width:10px; height:6px;
+  background:rgba(255,255,255,0.6);
+  border-radius:50%;
+  animation:flap 0.2s ease-in-out infinite alternate;
+}
+
+.leaf-fall{
+  position:absolute;
+  width:12px; height:12px;
+  background:var(--leaf-light);
+  border-radius:0 60% 0 60%;
+  z-index:6;
+}
+
+.sparkle{
+  position:absolute;
+  width:6px; height:6px;
+  background:#fff;
+  clip-path:polygon(50% 0%, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0% 50%, 39% 35%);
+  z-index:6;
+  animation:sparkle-twinkle 1.8s ease-in-out infinite;
+}
+@keyframes sparkle-twinkle{
+  0%,100%{ opacity:0.2; transform:scale(0.6) rotate(0deg); }
+  50%{ opacity:1; transform:scale(1.1) rotate(90deg); }
+}
+
+/* =====================================================================
+   7. FOOTER / CONTACT
+   ===================================================================== */
+.footer{
+  background:var(--leaf-forest);
+  color:#EAF7EA;
+  padding:3rem 5% 1.5rem 5%;
+  text-align:center;
+}
+.footer h3{
+  font-family:var(--font-display);
+  font-size:1.4rem;
+  margin-bottom:0.6rem;
+}
+.footer p{ color:#C9E4C9; margin-bottom:1.4rem; }
+.footer .btn{ margin-bottom:2rem; }
+.footer small{ display:block; color:#8FBB8F; font-size:0.8rem; }
+
+/* =====================================================================
+   8. RESPONSIVE — tablet & mobile
+   ===================================================================== */
+@media (max-width:900px){
+  .maria-hero img{ height:34vh; }
+  .garden-stage{ height:110vh; }
+}
+
+@media (max-width:700px){
+  .nav-menu{
+    position:fixed;
+    top:0; right:0;
+    height:100vh;
+    width:70%;
+    max-width:300px;
+    background:rgba(255,255,255,0.97);
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:2rem;
+    transform:translateX(100%);
+    transition:transform 0.45s ease;
+    z-index:105;
+  }
+  .nav-menu.open{ transform:translateX(0); }
+  .nav-menu .nav-link{ color:var(--leaf-forest); font-size:1.1rem; }
+  .hamburger{ display:flex; }
+  .sun{ width:80px; height:80px; }
+  .maria-hero img{ height:28vh; }
+  .profile-card{ padding:2rem 1.4rem; }
+  .card-actions{ flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     NAVBAR
+     ===================================================================== -->
+<nav class="navbar" id="navbar">
+  <a href="#home" class="logo">🌿 Maria<span>.</span></a>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="#home" class="nav-link">Home</a></li>
+    <li><a href="#about" class="nav-link">About</a></li>
+    <li><a href="#gallery" class="nav-link">Gallery</a></li>
+    <li><a href="#nature" class="nav-link">Nature</a></li>
+    <li><a href="#contact" class="nav-link">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- =====================================================================
+     SECTION 1 — HERO
+     ===================================================================== -->
+<section class="hero" id="home">
+  <div class="light-rays"></div>
+  <div class="sun"></div>
+  <div class="cloud-layer" id="heroClouds"></div>
+  <div class="bird-layer" id="heroBirds"></div>
+
+  <div class="hill hill-far"></div>
+  <div class="hill hill-near"></div>
+
+  <!-- Trees, bushes, flowers, grass, butterflies, pollen injected by JS -->
+  <div id="heroDecor"></div>
+
+  <div class="grass-strip" id="heroGrass"></div>
+
+  <div class="maria-hero">
+    <div class="glow-ring"></div>
+    <img src="../multicomponent/public/2.jpg" alt="Maria">
+    <div class="maria-shadow"></div>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><span class="arrow"></span></div>
+</section>
+
+<!-- =====================================================================
+     SECTION 2 — PROFILE CARD
+     ===================================================================== -->
+<section class="profile-section reveal" id="about">
+  <h2 class="section-heading">Meet Maria</h2>
+  <p class="section-sub">A wanderer of gardens and golden hours, always chasing sunlight and butterflies.</p>
+
+  <div class="profile-card-wrap">
+    <div class="profile-card">
+      <div class="profile-pic-wrap">
+        <img src="../multicomponent/public/2.jpg" alt="Maria" class="profile-pic">
+      </div>
+      <h3 class="profile-name">Maria</h3>
+      <p class="profile-sub">NATURE LOVER 🌸</p>
+      <p class="profile-desc">Lover of quiet mornings, blooming gardens, and the sound of leaves in the wind. Here to share a little piece of the outdoors with you.</p>
+
+      <div class="social-row">
+        <a href="#" class="social-btn" aria-label="Instagram">📷</a>
+        <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
+        <a href="#" class="social-btn" aria-label="Pinterest">📌</a>
+        <a href="#" class="social-btn" aria-label="Email">✉️</a>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn">Follow</button>
+        <button class="btn btn-outline">Contact</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECTION 3 — GARDEN SCENE
+     ===================================================================== -->
+<section class="garden-section reveal" id="gallery">
+  <h2 class="section-heading">Maria's Garden</h2>
+  <p class="section-sub">A living, breathing garden — flowers sway, butterflies dance, and bees hum from bloom to bloom.</p>
+
+  <div class="garden-stage" id="gardenStage">
+    <div class="fence" id="fence"></div>
+    <div class="pond" id="pond"></div>
+    <div class="grass-strip"></div>
+    <!-- All garden elements (trees, bushes, flowers, grass, butterflies,
+         bees, birds, falling leaves, sparkles, stones) injected by JS -->
+  </div>
+</section>
+
+<!-- =====================================================================
+     NATURE / CONTACT (simple closing sections to satisfy the nav links)
+     ===================================================================== -->
+<section id="nature" class="profile-section reveal" style="padding-top:4rem;">
+  <h2 class="section-heading">Grown With Nature</h2>
+  <p class="section-sub">Every element on this page — the trees, flowers, butterflies and sparkles — is generated live with JavaScript, so no two visits render quite the same garden.</p>
+</section>
+
+<!-- =====================================================================
+     FOOTER / CONTACT
+     ===================================================================== -->
+<footer class="footer reveal" id="contact">
+  <h3>Let's grow something beautiful 🌱</h3>
+  <p>Say hello — Maria would love to hear from you.</p>
+  <button class="btn btn-pink">Get in Touch</button>
+  <small>&copy; 2026 Maria. All rights reserved.</small>
+</footer>
+
+<script>
+/* =====================================================================
+   GLOBAL HELPERS
+   ===================================================================== */
+function rand(min, max){ return Math.random() * (max - min) + min; }
+function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+// A single injected <style> tag that holds all dynamically generated
+// @keyframes rules (used for butterflies, pollen, leaves, sparkles, birds)
+const dynamicStyle = document.createElement('style');
+document.head.appendChild(dynamicStyle);
+let keyframeCounter = 0;
+function addKeyframes(rules){
+  dynamicStyle.appendChild(document.createTextNode(rules));
+}
+
+/* =====================================================================
+   NAVBAR BEHAVIOR — scroll shrink, mobile menu, smooth scroll
+   ===================================================================== */
+const navbar = document.getElementById('navbar');
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.getElementById('navMenu');
+
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  navMenu.classList.toggle('open');
+});
+
+// Close mobile menu + smooth scroll when a link is clicked
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    hamburger.classList.remove('open');
+    navMenu.classList.remove('open');
+    const target = document.querySelector(link.getAttribute('href'));
+    if(target){ target.scrollIntoView({ behavior:'smooth' }); }
+  });
+});
+
+/* =====================================================================
+   FADE-IN ON SCROLL — IntersectionObserver toggles .is-visible
+   ===================================================================== */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('is-visible');
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* =====================================================================
+   BUTTON RIPPLE EFFECT
+   ===================================================================== */
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', function(e){
+    const rect = this.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top  = (e.clientY - rect.top - size / 2) + 'px';
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 650);
+  });
+});
+
+/* =====================================================================
+   ELEMENT FACTORY FUNCTIONS — reused across hero + garden sections
+   ===================================================================== */
+
+// --- Clouds ---
+function createCloud(container, top, duration, delay){
+  const cloud = document.createElement('div');
+  cloud.className = 'cloud';
+  const width = rand(70, 160);
+  cloud.style.width = width + 'px';
+  cloud.style.height = (width * 0.4) + 'px';
+  cloud.style.top = top + '%';
+  cloud.style.animation = `cloud-drift ${duration}s linear infinite`;
+  cloud.style.animationDelay = delay + 's';
+  container.appendChild(cloud);
+}
+
+// --- Birds: unique flight paths across the sky ---
+function createBird(container, top, duration, delay){
+  const bird = document.createElement('div');
+  bird.className = 'bird';
+  bird.style.top = top + '%';
+  bird.style.animation = `bird-fly ${duration}s linear infinite`;
+  bird.style.animationDelay = delay + 's';
+  container.appendChild(bird);
+}
+
+// --- Trees ---
+function createTree(container, leftPercent, scale, bottomOverride){
+  const tree = document.createElement('div');
+  tree.className = 'tree';
+  tree.style.left = leftPercent + '%';
+  tree.style.transform = `scale(${scale})`;
+  tree.style.animationDelay = rand(0,3) + 's';
+  if(bottomOverride) tree.style.bottom = bottomOverride;
+  tree.innerHTML = `
+    <div class="leaves l2"></div>
+    <div class="leaves l3"></div>
+    <div class="leaves l1"></div>
+    <div class="trunk"></div>`;
+  container.appendChild(tree);
+}
+
+// --- Bushes ---
+function createBush(container, leftPercent){
+  const bush = document.createElement('div');
+  bush.className = 'bush';
+  bush.style.left = leftPercent + '%';
+  bush.style.animationDelay = rand(0,2) + 's';
+  for(let i=0;i<4;i++){
+    const blob = document.createElement('div');
+    blob.className = 'blob';
+    const size = rand(28,52);
+    blob.style.width = size+'px';
+    blob.style.height = size+'px';
+    blob.style.left = (i*17)+'px';
+    blob.style.bottom = rand(0,10)+'px';
+    blob.style.background = pick(['#4CA850','#5CB35E','#2F7A3B']);
+    bush.appendChild(blob);
+  }
+  container.appendChild(bush);
+}
+
+// --- Flowers ---
+const flowerColors = ['#FF6FA5','#FFD34D','#B47CE5','#FFFFFF','#FF9A6D'];
+function createFlower(container, leftPercent){
+  const flower = document.createElement('div');
+  flower.className = 'flower';
+  flower.style.left = leftPercent + '%';
+  flower.style.animationDelay = rand(0,2)+'s';
+
+  const color = pick(flowerColors);
+  const petals = document.createElement('div');
+  petals.className = 'petals';
+  for(let i=0;i<5;i++){
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.style.background = color;
+    const angle = (360/5)*i;
+    petal.style.left = (Math.cos(angle*Math.PI/180)*6.5+5.5)+'px';
+    petal.style.top  = (Math.sin(angle*Math.PI/180)*6.5+5.5)+'px';
+    petals.appendChild(petal);
+  }
+  const center = document.createElement('div');
+  center.className = 'center';
+  petals.appendChild(center);
+
+  const stem = document.createElement('div');
+  stem.className = 'stem';
+
+  flower.appendChild(petals);
+  flower.appendChild(stem);
+  container.appendChild(flower);
+}
+
+// --- Grass blades ---
+function createGrassBlades(container, count){
+  for(let i=0;i<count;i++){
+    const blade = document.createElement('div');
+    blade.className = 'grass-blade';
+    blade.style.left = rand(0,100)+'%';
+    blade.style.height = rand(14,30)+'px';
+    blade.style.animationDelay = rand(0,2.5)+'s';
+    blade.style.animationDuration = rand(2,3.4)+'s';
+    blade.style.background = pick(['#2F7A3B','#4CA850','#3E8E45']);
+    container.appendChild(blade);
+  }
+}
+
+// --- Butterflies: random looping flight path around a center point ---
+const butterflyColors = ['#FF8AC8','#7FD8FF','#FFD35C','#B99CFF','#FF9E6D'];
+function createButterfly(container, centerXvw, centerYvh){
+  const butterfly = document.createElement('div');
+  butterfly.className = 'butterfly';
+  const size = rand(0.8,1.4);
+  const color = pick(butterflyColors);
+
+  butterfly.innerHTML = `
+    <div class="wing left" style="background:${color};"></div>
+    <div class="wing right" style="background:${color};"></div>
+    <div class="body"></div>`;
+
+  const animName = 'bfly-' + (keyframeCounter++);
+  const radiusX = rand(14,32);
+  const radiusY = rand(8,20);
+  const startAngle = rand(0,360);
+  const spin = pick([1,-1]);
+
+  let kf = `@keyframes ${animName} {`;
+  const steps = 6;
+  for(let s=0;s<=steps;s++){
+    const pct = (s/steps)*100;
+    const angle = startAngle + spin*(s/steps)*360;
+    const wobble = Math.sin(s*1.7)*4;
+    const x = centerXvw + Math.cos(angle*Math.PI/180)*(radiusX+wobble);
+    const y = centerYvh + Math.sin(angle*Math.PI/180)*(radiusY+wobble);
+    const rot = Math.cos(angle*Math.PI/180)*20;
+    kf += `${pct}% { left:${x}vw; top:${y}vh; transform:scale(${size}) rotate(${rot}deg); }`;
+  }
+  kf += `}`;
+  addKeyframes(kf);
+
+  const duration = rand(9,16);
+  butterfly.style.position = 'absolute';
+  butterfly.style.animation = `${animName} ${duration}s ease-in-out infinite`;
+  butterfly.style.animationDelay = rand(0,5)+'s';
+  container.appendChild(butterfly);
+}
+
+// --- Pollen / sparkle-like rising particles ---
+function createPollen(container, boundsTopVh, boundsBottomVh){
+  const dot = document.createElement('div');
+  dot.className = 'pollen';
+  const size = rand(3,7);
+  dot.style.width = size+'px';
+  dot.style.height = size+'px';
+  dot.style.left = rand(0,100)+'vw';
+  dot.style.top = rand(boundsTopVh, boundsBottomVh)+'vh';
+
+  const animName = 'pollen-' + (keyframeCounter++);
+  const drift = rand(-40,40);
+  const rise = rand(30,70);
+  addKeyframes(`@keyframes ${animName} {
+    0%{ transform:translate(0,0); opacity:0; }
+    10%{ opacity:0.9; }
+    50%{ transform:translate(${drift/2}px, -${rise/2}px); opacity:0.8; }
+    90%{ opacity:0.3; }
+    100%{ transform:translate(${drift}px, -${rise}px); opacity:0; }
+  }`);
+  dot.style.animation = `${animName} ${rand(6,12)}s ease-in-out infinite`;
+  dot.style.animationDelay = rand(0,8)+'s';
+  container.appendChild(dot);
+}
+
+// --- Falling leaves (garden section) ---
+function createFallingLeaf(container){
+  const leaf = document.createElement('div');
+  leaf.className = 'leaf-fall';
+  leaf.style.left = rand(0,100)+'%';
+  leaf.style.background = pick(['#8FD16B','#FFD34D','#FF9A6D','#4CA850']);
+
+  const animName = 'leaf-' + (keyframeCounter++);
+  const sway = rand(30,80);
+  addKeyframes(`@keyframes ${animName} {
+    0%{ transform:translate(0,-10vh) rotate(0deg); opacity:0; }
+    10%{ opacity:1; }
+    50%{ transform:translate(${sway}px, 45vh) rotate(180deg); }
+    100%{ transform:translate(0px, 95vh) rotate(360deg); opacity:0.9; }
+  }`);
+  leaf.style.animation = `${animName} ${rand(7,13)}s linear infinite`;
+  leaf.style.animationDelay = rand(0,10)+'s';
+  container.appendChild(leaf);
+}
+
+// --- Sparkles (garden section) ---
+function createSparkle(container){
+  const sparkle = document.createElement('div');
+  sparkle.className = 'sparkle';
+  sparkle.style.left = rand(0,100)+'%';
+  sparkle.style.top = rand(10,90)+'%';
+  sparkle.style.background = pick(['#FFFFFF','#FFE9A8','#FFD1EC']);
+  sparkle.style.animationDelay = rand(0,2)+'s';
+  container.appendChild(sparkle);
+}
+
+// --- Bees: short darting loops between flowers ---
+function createBee(container, centerXvw, centerYvh){
+  const bee = document.createElement('div');
+  bee.className = 'bee';
+  const animName = 'bee-' + (keyframeCounter++);
+  const rX = rand(10,22), rY = rand(6,14);
+  const startAngle = rand(0,360);
+  addKeyframes(`@keyframes ${animName} {
+    0%{ left:${centerXvw}vw; top:${centerYvh}vh; }
+    25%{ left:${centerXvw+rX}vw; top:${centerYvh-rY}vh; }
+    50%{ left:${centerXvw}vw; top:${centerYvh-rY*1.4}vh; }
+    75%{ left:${centerXvw-rX}vw; top:${centerYvh-rY}vh; }
+    100%{ left:${centerXvw}vw; top:${centerYvh}vh; }
+  }`);
+  bee.style.position = 'absolute';
+  bee.style.animation = `${animName} ${rand(4,7)}s ease-in-out infinite`;
+  bee.style.animationDelay = rand(0,3)+'s';
+  container.appendChild(bee);
+}
+
+// --- Stones ---
+function createStone(container, leftPercent, bottomPercent){
+  const stone = document.createElement('div');
+  stone.className = 'stone';
+  const size = rand(20,40);
+  stone.style.width = size+'px';
+  stone.style.height = (size*0.65)+'px';
+  stone.style.left = leftPercent+'%';
+  stone.style.bottom = bottomPercent+'%';
+  container.appendChild(stone);
+}
+
+/* =====================================================================
+   ASSEMBLE HERO SCENE
+   ===================================================================== */
+const heroClouds = document.getElementById('heroClouds');
+const heroBirds  = document.getElementById('heroBirds');
+const heroDecor  = document.getElementById('heroDecor');
+const heroGrass  = document.getElementById('heroGrass');
+
+for(let i=0;i<6;i++) createCloud(heroClouds, rand(2,55), rand(35,65), rand(-40,0));
+for(let i=0;i<4;i++) createBird(heroBirds, rand(8,35), rand(14,22), rand(0,10));
+
+createTree(heroDecor, 4, 1.05);
+createTree(heroDecor, 11, 0.78);
+createTree(heroDecor, 87, 1.0);
+createTree(heroDecor, 93, 0.75);
+createBush(heroDecor, 20);
+createBush(heroDecor, 74);
+
+for(let i=0;i<22;i++){
+  let pos = rand(0,100);
+  if(pos > 42 && pos < 58) pos += 20;
+  createFlower(heroDecor, pos % 100);
+}
+createGrassBlades(heroGrass, 80);
+
+for(let i=0;i<8;i++) createButterfly(heroDecor, 50, 55);
+for(let i=0;i<14;i++) createPollen(heroDecor, 20, 90);
+
+/* =====================================================================
+   ASSEMBLE GARDEN SCENE
+   ===================================================================== */
+const gardenStage = document.getElementById('gardenStage');
+const fence = document.getElementById('fence');
+const pond  = document.getElementById('pond');
+
+// Fence posts + rail
+for(let i=0;i<26;i++){
+  const post = document.createElement('div');
+  post.className = 'fence-post';
+  fence.appendChild(post);
+}
+const rail = document.createElement('div');
+rail.className = 'fence-rail';
+rail.style.bottom = '34px';
+fence.appendChild(rail);
+
+// Pond ripple rings
+for(let i=0;i<3;i++){
+  const ring = document.createElement('div');
+  ring.className = 'ripple-ring';
+  ring.style.animationDelay = (i*1.2)+'s';
+  pond.appendChild(ring);
+}
+
+// Stones near the pond
+createStone(gardenStage, 24, 8);
+createStone(gardenStage, 27, 6);
+createStone(gardenStage, 30, 9);
+
+// Trees & bushes scattered across the wide garden
+createTree(gardenStage, 6, 1.1);
+createTree(gardenStage, 40, 0.85);
+createTree(gardenStage, 60, 0.95);
+createTree(gardenStage, 84, 1.15);
+createBush(gardenStage, 15);
+createBush(gardenStage, 50);
+createBush(gardenStage, 70);
+createBush(gardenStage, 90);
+
+// Flowers spread across the whole garden floor
+for(let i=0;i<40;i++){
+  createFlower(gardenStage, rand(0,100));
+}
+
+// Grass blades
+createGrassBlades(gardenStage, 130);
+
+// Butterflies fluttering around several garden "hotspots"
+const gardenHotspots = [[20,55],[45,50],[65,58],[80,50]];
+gardenHotspots.forEach(([x,y]) => {
+  for(let i=0;i<3;i++) createButterfly(gardenStage, x, y);
+});
+
+// Bees around the flower clusters
+gardenHotspots.forEach(([x,y]) => {
+  createBee(gardenStage, x+5, y+10);
+});
+
+// Falling leaves drifting down through the whole scene
+for(let i=0;i<16;i++) createFallingLeaf(gardenStage);
+
+// Sparkle particles for magical atmosphere
+for(let i=0;i<18;i++) createSparkle(gardenStage);
+
+// Birds crossing the garden sky
+const gardenBirdLayer = document.createElement('div');
+gardenBirdLayer.className = 'bird-layer';
+gardenStage.appendChild(gardenBirdLayer);
+for(let i=0;i<3;i++) createBird(gardenBirdLayer, rand(5,20), rand(14,22), rand(0,10));
+
+</script>
+</body>
+</html>
