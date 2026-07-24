@@ -1,0 +1,33 @@
+RDBMS
+Relational Database Management System. A software system used to create, store, organize, and manage data in tables with rows and columns. Examples: MySQL, PostgreSQL, Oracle
+
+SQL	
+Structured Query Language. The standard language used to create, retrieve, update, and delete data in a database. Example: SELECT * FROM students;
+
+MySQL	
+A popular open-source RDBMS used for web applications. It stores data in relational tables and uses SQL.
+
+MySQLi	
+MySQL Improved Extension for PHP. It allows PHP programs to connect to and interact with MySQL databases.
+
+PG (PostgreSQL)	
+An advanced open-source RDBMS known for reliability, performance, and support for complex SQL features.
+
+Oracle	
+A commercial RDBMS developed by Oracle Corporation. It is widely used by large organizations for enterprise applications.
+
+Server	
+A computer or software that provides services to other computers (clients). A database server stores and manages databases.
+
+XAMPP	
+A free software package that includes Apache, MySQL/MariaDB, PHP, and Perl. It is commonly used to create a local web development environment.
+
+WAMP	
+A software package for Windows that includes Windows, Apache, MySQL/MariaDB, and PHP. It is used for local web development on Windows.
+
+GUI	
+Graphical User Interface. A visual interface with windows, buttons, menus, and icons that lets users interact with software without typing commands.
+
+MySQL 
+Workbench 8	
+A graphical tool for MySQL that allows you to create databases, write SQL queries, design tables, manage users, and administer MySQL servers.

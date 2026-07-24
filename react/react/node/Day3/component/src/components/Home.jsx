@@ -1,33 +1,6 @@
 import profileImg from '../assets/Arul.png'
 
 
-
-// const teamMembers = [
-//     {
-//       id: 1,
-//       name: "John Doe",
-//       designation: "Frontend Developer",
-//       image: "/member1.jpg",
-//     },
-//     {
-//       id: 2,
-//       name: "Jane Smith",
-//       designation: "UI/UX Designer",
-//       image: "/member2.jpg",
-//     },
-//     {
-//       id: 3,
-//       name: "David Lee",
-//       designation: "Backend Developer",
-//       image: "/member3.jpg",
-//     },
-//     {
-//       id: 4,
-//       name: "Emily Brown",
-//       designation: "Project Manager",
-//       image: "/member4.jpg",
-//     },
-//   ];
 const Home = ()=>{
     return (
         <>

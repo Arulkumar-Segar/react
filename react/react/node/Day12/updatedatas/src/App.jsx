@@ -41,7 +41,7 @@ const App = () => {
     <h2>Price:{product.price}</h2>
     <button onClick={updateProduct}>update product</button>
     </div>
-
+    
     <div>
       <h2>Actors</h2>
       {arr.map((e,i)=>(
